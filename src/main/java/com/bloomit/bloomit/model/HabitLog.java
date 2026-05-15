@@ -14,9 +14,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 
-
-
-
 @Entity
 @Table(name="habit_log")
 public class HabitLog {
@@ -29,20 +26,20 @@ public class HabitLog {
     @JoinColumn(name = "user_id")
     User user;
 
-    @Column(nullable = false)
-    int sleepHours;
+    @Column
+    double sleepHours;
 
-    @Column(nullable = false)
+    @Column
     int waterMl;
 
-    @Column(nullable = false)
+    @Column
     int steps;
 
-    @Column(nullable = false)
-    int mood;
+    @Column @Enumerated(EnumType.STRING)
+    Mood mood;
 
-    @Column(nullable = false)
-    int energy;
+    @Column @Enumerated(EnumType.STRING)
+    Energy energy;
 
     @Column(nullable = false, updatable = false)
     LocalDateTime createdAt;

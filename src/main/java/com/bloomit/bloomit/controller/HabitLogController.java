@@ -1,7 +1,7 @@
-package com.bloomit.bloomit.controllers;
+package com.bloomit.bloomit.controller;
 
 import com.bloomit.bloomit.model.HabitLog;
-import com.bloomit.bloomit.services.HabitLogService;
+import com.bloomit.bloomit.service.HabitLogServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/habits")
 @RequiredArgsConstructor
 public class HabitLogController {
-    private final HabitLogService habitLogService;
+    private final HabitLogServiceImpl habitLogServiceImpl;
 
     @PostMapping
     public HabitLog addNewHabit(@RequestBody HabitLog habitLog){
-        return habitLogService.save(habitLog);
+        return habitLogServiceImpl.save(habitLog);
     }
 }
