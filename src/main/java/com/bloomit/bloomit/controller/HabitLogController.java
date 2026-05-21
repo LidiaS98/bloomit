@@ -1,21 +1,29 @@
 package com.bloomit.bloomit.controller;
 
 import com.bloomit.bloomit.model.HabitLog;
-import com.bloomit.bloomit.service.HabitLogServiceImpl;
+import com.bloomit.bloomit.service.HabitLogService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/habits")
 @RequiredArgsConstructor
 public class HabitLogController {
-    private final HabitLogServiceImpl habitLogServiceImpl;
+    private final HabitLogService habitLogService;
 
     @PostMapping
     public HabitLog addNewHabit(@RequestBody HabitLog habitLog){
-        return habitLogServiceImpl.save(habitLog);
+        return habitLogService.save(habitLog);
+    }
+
+    @GetMapping("/{userId}")
+    public List<HabitLog> getHabitLog(@PathVariable Long userId){
+        return habitLogService.findAllByUser(userId);
+    }
+
+    @DeleteMapping("/{id}")
+    void deleteHabitLog(@PathVariable Long id){
+        habitLogService.deleteById(id);
     }
 }
