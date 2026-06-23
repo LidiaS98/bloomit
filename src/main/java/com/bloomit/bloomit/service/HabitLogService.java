@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface HabitLogService {
     HabitLog save(HabitLog habitLog);
-    List<HabitLog> findAllByUser();
+    List<HabitLog> findAllByUser(Long userId);
     void deleteById(Long id);
 }

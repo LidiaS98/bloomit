@@ -15,8 +15,8 @@ public class HabitLogServiceImpl implements HabitLogService {
         return habitLogRepository.save(habitLog);
     }
 
-    public List <HabitLog> findAllByUser(){
-        return habitLogRepository.findAll();
+    public List <HabitLog> findAllByUser(Long userId){
+        return habitLogRepository.findByUser_Id(userId);
     }
 
     public void deleteById(Long id){
