@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react"
 import styles from "./styles/styles.js"
+import HabitForm from "./components/HabitForm.jsx"
+import HabitsList from "./components/HabitsList.jsx"
 
 const API = "http://localhost:8080"
-
-const MOODS = ["VERY_BAD", "BAD", "NEUTRAL", "GOOD", "VERY_GOOD"]
-const ENERGIES = ["VERY_LOW", "LOW", "MODERATE", "HIGH", "VERY_HIGH"]
 
 const moodEmoji = {
   VERY_BAD: "😞", BAD: "😕", NEUTRAL: "😐", GOOD: "🙂", VERY_GOOD: "😄"
@@ -12,7 +11,6 @@ const moodEmoji = {
 const energyEmoji = {
   VERY_LOW: "🪫", LOW: "😴", MODERATE: "⚡", HIGH: "🔋", VERY_HIGH: "🚀"
 }
-
 
 export default function App() {
   const [sleepHours, setSleepHours] = useState(0)
@@ -53,78 +51,29 @@ export default function App() {
         <h1 style={styles.logo}>BloomIT</h1>
       </div>
 
-      <div style={styles.card}>
-        <p style={styles.cardTitle}>Log today's habits</p>
+      <HabitForm
+          sleepHours={sleepHours}
+          setSleepHours={setSleepHours}
+          waterMl={waterMl}
+          setWaterMl={setWaterMl}
+          steps={steps}
+          setSteps={setSteps}
+          selectedMood={selectedMood}
+          setSelectedMood={setSelectedMood}
+          selectedEnergy={selectedEnergy}
+          setSelectedEnergy={setSelectedEnergy}
+          handleSubmit={handleSubmit}
+          saved={saved}
+      />
 
-        <div style={styles.field}>
-          <label style={styles.label}>Hours slept</label>
-          <input style={styles.input} type="number" value={sleepHours}
-            onChange={e => setSleepHours(e.target.value)} />
-        </div>
-
-        <div style={styles.field}>
-          <label style={styles.label}>Water (ml)</label>
-          <input style={styles.input} type="number" value={waterMl}
-            onChange={e => setWaterMl(e.target.value)} />
-        </div>
-
-        <div style={styles.field}>
-          <label style={styles.label}>Steps</label>
-          <input style={styles.input} type="number" value={steps}
-            onChange={e => setSteps(e.target.value)} />
-        </div>
-
-        <div style={styles.field}>
-          <label style={styles.label}>Mood</label>
-          <select style={styles.select} value={selectedMood}
-            onChange={e => setSelectedMood(e.target.value)}>
-            {MOODS.map(m => (
-              <option key={m} value={m}>{moodEmoji[m]} {m.replace("_", " ")}</option>
-            ))}
-          </select>
-        </div>
-
-        <div style={styles.field}>
-          <label style={styles.label}>Energy</label>
-          <select style={styles.select} value={selectedEnergy}
-            onChange={e => setSelectedEnergy(e.target.value)}>
-            {ENERGIES.map(e => (
-              <option key={e} value={e}>{energyEmoji[e]} {e.replace("_", " ")}</option>
-            ))}
-          </select>
-        </div>
-
-        <button style={styles.button} onClick={handleSubmit}>Save today's log</button>
-        {saved && <div style={styles.successMsg}>✅ Habit saved!</div>}
-      </div>
-
-      <div style={styles.card}>
-        <p style={styles.cardTitle}>My habit logs</p>
-        <div style={styles.userRow}>
-          <div style={styles.userInput}>
-            <label style={styles.label}>Your user ID</label>
-            <input style={styles.input} type="number" placeholder="e.g. 2"
-              value={userId} onChange={e => setUserId(e.target.value)} />
-          </div>
-          <button style={styles.loadBtn} onClick={loadHabits}>Load →</button>
-        </div>
-
-        <div style={{ marginTop: "1rem" }}>
-          {habits.length === 0
-            ? <p style={styles.empty}>Enter your user ID and click Load to see your logs.</p>
-            : habits.map(h => (
-              <div key={h.id} style={styles.habitItem}>
-                <span style={styles.habitStat}><span style={styles.statLabel}>Sleep</span> {h.sleepHours}h</span>
-                <span style={styles.habitStat}><span style={styles.statLabel}>Water</span> {h.waterMl}ml</span>
-                <span style={styles.habitStat}><span style={styles.statLabel}>Steps</span> {h.steps}</span>
-                <span style={styles.habitStat}><span style={styles.statLabel}>Mood</span> {moodEmoji[h.mood]} {h.mood}</span>
-                <span style={styles.habitStat}><span style={styles.statLabel}>Energy</span> {energyEmoji[h.energy]} {h.energy}</span>
-                <span style={styles.habitStat}><span style={styles.statLabel}>Date</span> {new Date(h.createdAt).toLocaleDateString()}</span>
-              </div>
-            ))
-          }
-        </div>
-      </div>
+     <HabitsList
+         userId={userId}
+         setUserId={setUserId}
+         habits={habits}
+         loadHabits={loadHabits}
+         moodEmoji={moodEmoji}
+         energyEmoji={energyEmoji}
+        />
     </div>
   )
 }
