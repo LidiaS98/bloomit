@@ -1,67 +1,78 @@
 import { useState } from "react"
+import "./styles/styles.css"
+import HabitForm from "./components/HabitForm.jsx"
+import HabitsList from "./components/HabitsList.jsx"
 
-function App() {
-    const [sleepHours, setSleepHours] = useState(0);
-    const [waterMl, setWaterMl] = useState(0);
-    const [steps, setSteps] = useState(0);
-    const [selectedMood, setSelectedMood ]= useState("VERY GOOD");
-    const [selectedEnergy, setSelectedEnergy]= useState("VERY HIGH");
+const API = "http://localhost:8080"
 
-
-    return (
-        <div>
-            <h1>BloomIT</h1>
-            <label> How many hours slept? :
-            <input
-                type="number"
-                value={sleepHours}
-                onChange={(e) => setSleepHours(e.target.value)}
-            />
-            </label>
-            <hr />
-            <label> How many water? :
-            <input
-                type="number"
-                value={waterMl}
-                onChange={(e) => setWaterMl(e.target.value)}
-            />
-            </label>
-            <hr />
-            <label> How many steps? :
-            <input
-                type="number"
-                value={steps}
-                onChange={(e) => setSteps(e.target.value)}
-            />
-            </label>
-            <hr />
-            <label> Pick a your mood :
-            <select
-              value={selectedMood}
-              onChange={e => setSelectedMood(e.target.value)}
-              >
-              <option value="VERY_BAD">VERY_BAD</option>
-              <option value="BAD">BAD</option>
-              <option value="NEUTRAL">NEUTRAL</option>
-              <option value="GOOD">GOOD</option>
-              <option value="VERY_GOOD">VERY_GOOD</option>
-            </select>
-            </label>
-            <hr />
-            <label> Pick a your energy :
-            <select
-              value={selectedEnergy}
-              onChange={e => setSelectedEnergy(e.target.value)}
-              >
-              <option value="VERY_LOW">VERY_LOW</option>
-              <option value="LOW">LOW</option>
-              <option value="MODERATE">MODERATE</option>
-              <option value="HIGH">HIGH</option>
-              <option value="VERY_HIGH">VERY_HIGH</option>
-            </select>
-            </label>
-        </div>
-    )
+const moodEmoji = {
+  VERY_BAD: "😞", BAD: "😕", NEUTRAL: "😐", GOOD: "🙂", VERY_GOOD: "😄"
+}
+const energyEmoji = {
+  VERY_LOW: "🪫", LOW: "😴", MODERATE: "⚡", HIGH: "🔋", VERY_HIGH: "🚀"
 }
 
-export default App
+export default function App() {
+  const [sleepHours, setSleepHours] = useState(0)
+  const [waterMl, setWaterMl] = useState(0)
+  const [steps, setSteps] = useState(0)
+  const [selectedMood, setSelectedMood] = useState("NEUTRAL")
+  const [selectedEnergy, setSelectedEnergy] = useState("MODERATE")
+  const [saved, setSaved] = useState(false)
+  const [userId, setUserId] = useState("")
+  const [habits, setHabits] = useState([])
+
+  const handleSubmit = async () => {
+    await fetch(`${API}/api/habits`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        sleepHours, waterMl, steps,
+        mood: selectedMood,
+        energy: selectedEnergy,
+      })
+    })
+    setSaved(true)
+    setTimeout(() => setSaved(false), 2500)
+  }
+
+  const loadHabits = () => {
+    if (!userId) return
+    fetch(`${API}/api/habits/${userId}`)
+      .then(r => r.json())
+      .then(data => setHabits(data))
+  }
+
+  return (
+    <div className="app">
+      <div className="header">
+        <span className="leaf">🌿</span>
+        <h1 className="logo">BloomIT</h1>
+      </div>
+
+      <HabitForm
+        sleepHours={sleepHours}
+        setSleepHours={setSleepHours}
+        waterMl={waterMl}
+        setWaterMl={setWaterMl}
+        steps={steps}
+        setSteps={setSteps}
+        selectedMood={selectedMood}
+        setSelectedMood={setSelectedMood}
+        selectedEnergy={selectedEnergy}
+        setSelectedEnergy={setSelectedEnergy}
+        handleSubmit={handleSubmit}
+        saved={saved}
+      />
+
+      <HabitsList
+        userId={userId}
+        setUserId={setUserId}
+        habits={habits}
+        loadHabits={loadHabits}
+        moodEmoji={moodEmoji}
+        energyEmoji={energyEmoji}
+      />
+    </div>
+  )
+}
