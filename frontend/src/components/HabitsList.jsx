@@ -1,34 +1,58 @@
-import styles from "../styles/styles.js"
+const MOODS = ["VERY_BAD", "BAD", "NEUTRAL", "GOOD", "VERY_GOOD"]
+const ENERGIES = ["VERY_LOW", "LOW", "MODERATE", "HIGH", "VERY_HIGH"]
 
+const moodEmoji = {
+  VERY_BAD: "😞", BAD: "😕", NEUTRAL: "😐", GOOD: "🙂", VERY_GOOD: "😄"
+}
+const energyEmoji = {
+  VERY_LOW: "🪫", LOW: "😴", MODERATE: "⚡", HIGH: "🔋", VERY_HIGH: "🚀"
+}
 
-export default function HabitsList({userId, setUserId, habits, loadHabits, moodEmoji, energyEmoji }){
-    return (
-        <div style={styles.card}>
-                <p style={styles.cardTitle}>My habit logs</p>
-                <div style={styles.userRow}>
-                  <div style={styles.userInput}>
-                    <label style={styles.label}>Your user ID</label>
-                    <input style={styles.input} type="number" placeholder="e.g. 2"
-                      value={userId} onChange={e => setUserId(e.target.value)} />
-                  </div>
-                  <button style={styles.loadBtn} onClick={loadHabits}>Load →</button>
-                </div>
+export default function HabitForm({ sleepHours, setSleepHours, waterMl, setWaterMl, steps, setSteps, selectedMood, setSelectedMood, selectedEnergy, setSelectedEnergy, handleSubmit, saved }) {
+  return (
+    <div className="card">
+      <p className="card-title">Log today's habits</p>
 
-                <div style={{ marginTop: "1rem" }}>
-                  {habits.length === 0
-                    ? <p style={styles.empty}>Enter your user ID and click Load to see your logs.</p>
-                    : habits.map(h => (
-                      <div key={h.id} style={styles.habitItem}>
-                        <span style={styles.habitStat}><span style={styles.statLabel}>Sleep</span> {h.sleepHours}h</span>
-                        <span style={styles.habitStat}><span style={styles.statLabel}>Water</span> {h.waterMl}ml</span>
-                        <span style={styles.habitStat}><span style={styles.statLabel}>Steps</span> {h.steps}</span>
-                        <span style={styles.habitStat}><span style={styles.statLabel}>Mood</span> {moodEmoji[h.mood]} {h.mood}</span>
-                        <span style={styles.habitStat}><span style={styles.statLabel}>Energy</span> {energyEmoji[h.energy]} {h.energy}</span>
-                        <span style={styles.habitStat}><span style={styles.statLabel}>Date</span> {new Date(h.createdAt).toLocaleDateString()}</span>
-                      </div>
-                    ))
-                  }
-                </div>
-              </div>
-        )
-    }
+      <div className="field">
+        <label className="label">Hours slept</label>
+        <input className="input" type="number" value={sleepHours}
+          onChange={e => setSleepHours(e.target.value)} />
+      </div>
+
+      <div className="field">
+        <label className="label">Water (ml)</label>
+        <input className="input" type="number" value={waterMl}
+          onChange={e => setWaterMl(e.target.value)} />
+      </div>
+
+      <div className="field">
+        <label className="label">Steps</label>
+        <input className="input" type="number" value={steps}
+          onChange={e => setSteps(e.target.value)} />
+      </div>
+
+      <div className="field">
+        <label className="label">Mood</label>
+        <select className="select" value={selectedMood}
+          onChange={e => setSelectedMood(e.target.value)}>
+          {MOODS.map(m => (
+            <option key={m} value={m}>{moodEmoji[m]} {m.replace("_", " ")}</option>
+          ))}
+        </select>
+      </div>
+
+      <div className="field">
+        <label className="label">Energy</label>
+        <select className="select" value={selectedEnergy}
+          onChange={e => setSelectedEnergy(e.target.value)}>
+          {ENERGIES.map(e => (
+            <option key={e} value={e}>{energyEmoji[e]} {e.replace("_", " ")}</option>
+          ))}
+        </select>
+      </div>
+
+      <button className="button" onClick={handleSubmit}>Save today's log</button>
+      {saved && <div className="success-msg">✅ Habit saved!</div>}
+    </div>
+  )
+}

@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react"
-import styles from "./styles/styles.js"
+import { useState } from "react"
+import "./styles/styles.css"
 import HabitForm from "./components/HabitForm.jsx"
 import HabitsList from "./components/HabitsList.jsx"
 
@@ -19,7 +19,6 @@ export default function App() {
   const [selectedMood, setSelectedMood] = useState("NEUTRAL")
   const [selectedEnergy, setSelectedEnergy] = useState("MODERATE")
   const [saved, setSaved] = useState(false)
-
   const [userId, setUserId] = useState("")
   const [habits, setHabits] = useState([])
 
@@ -45,35 +44,35 @@ export default function App() {
   }
 
   return (
-    <div style={styles.app}>
-      <div style={styles.header}>
-        <span style={styles.leaf}>🌿</span>
-        <h1 style={styles.logo}>BloomIT</h1>
+    <div className="app">
+      <div className="header">
+        <span className="leaf">🌿</span>
+        <h1 className="logo">BloomIT</h1>
       </div>
 
       <HabitForm
-          sleepHours={sleepHours}
-          setSleepHours={setSleepHours}
-          waterMl={waterMl}
-          setWaterMl={setWaterMl}
-          steps={steps}
-          setSteps={setSteps}
-          selectedMood={selectedMood}
-          setSelectedMood={setSelectedMood}
-          selectedEnergy={selectedEnergy}
-          setSelectedEnergy={setSelectedEnergy}
-          handleSubmit={handleSubmit}
-          saved={saved}
+        sleepHours={sleepHours}
+        setSleepHours={setSleepHours}
+        waterMl={waterMl}
+        setWaterMl={setWaterMl}
+        steps={steps}
+        setSteps={setSteps}
+        selectedMood={selectedMood}
+        setSelectedMood={setSelectedMood}
+        selectedEnergy={selectedEnergy}
+        setSelectedEnergy={setSelectedEnergy}
+        handleSubmit={handleSubmit}
+        saved={saved}
       />
 
-     <HabitsList
-         userId={userId}
-         setUserId={setUserId}
-         habits={habits}
-         loadHabits={loadHabits}
-         moodEmoji={moodEmoji}
-         energyEmoji={energyEmoji}
-        />
+      <HabitsList
+        userId={userId}
+        setUserId={setUserId}
+        habits={habits}
+        loadHabits={loadHabits}
+        moodEmoji={moodEmoji}
+        energyEmoji={energyEmoji}
+      />
     </div>
   )
 }
