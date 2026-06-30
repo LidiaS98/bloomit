@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,12 +32,15 @@ public class HabitLog {
     User user;
 
     @Column
+    @DecimalMin("0.0") @DecimalMax("24.0")
     double sleepHours;
 
     @Column
+    @Min(0) @Max(10000)
     int waterMl;
 
     @Column
+    @Min(0) @Max(100000)
     int steps;
 
     @Column @Enumerated(EnumType.STRING)
