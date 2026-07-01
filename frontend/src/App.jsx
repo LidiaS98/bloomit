@@ -21,9 +21,10 @@ export default function App() {
   const [saved, setSaved] = useState(false)
   const [userId, setUserId] = useState("")
   const [habits, setHabits] = useState([])
+  const [error, setError] = useState(null)
 
   const handleSubmit = async () => {
-    await fetch(`${API}/api/habits`, {
+    const response = await fetch(`${API}/api/habits`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -32,8 +33,13 @@ export default function App() {
         energy: selectedEnergy,
       })
     })
+
+if (response.ok){
     setSaved(true)
     setTimeout(() => setSaved(false), 2500)
+    } else if (response.status === 400){
+        setError("Invalid data! Check your inputs.")
+    }
   }
 
   const loadHabits = () => {
@@ -64,7 +70,7 @@ export default function App() {
         handleSubmit={handleSubmit}
         saved={saved}
       />
-
+       {error && <div className="error-msg">{error}</div>}
       <HabitsList
         userId={userId}
         setUserId={setUserId}
