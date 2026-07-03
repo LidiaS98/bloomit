@@ -1,5 +1,6 @@
 package com.bloomit.bloomit.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,6 +26,7 @@ public class User {
     @Column(nullable = false, unique = true, length = 254)
     String email;
 
+    @JsonIgnore
     @Column(nullable = false)
     String password;
 
