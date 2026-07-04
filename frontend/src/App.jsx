@@ -2,6 +2,7 @@ import { useState } from "react"
 import "./styles/styles.css"
 import HabitForm from "./components/HabitForm.jsx"
 import HabitsList from "./components/HabitsList.jsx"
+import LoginForm from "./components/LoginForm.jsx"
 
 const API = "http://localhost:8080"
 
@@ -22,6 +23,26 @@ export default function App() {
   const [userId, setUserId] = useState("")
   const [habits, setHabits] = useState([])
   const [error, setError] = useState(null)
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [loggedUser, setLoggedUser] = useState(null)
+  const [loggedIn, setLoggedIn] = useState(false)
+
+  const handleLogin = async () => {
+      const response = await fetch(`${API}/api/auth`,{
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+              email,
+              password
+          })
+      })
+      if (response.ok){
+          const user = await response.json()
+          setLoggedUser(user)
+          setLoggedIn(true)
+          }
+      }
 
   const handleSubmit = async () => {
     const response = await fetch(`${API}/api/habits`, {
@@ -55,30 +76,41 @@ if (response.ok){
         <span className="leaf">🌿</span>
         <h1 className="logo">BloomIT</h1>
       </div>
-
-      <HabitForm
-        sleepHours={sleepHours}
-        setSleepHours={setSleepHours}
-        waterMl={waterMl}
-        setWaterMl={setWaterMl}
-        steps={steps}
-        setSteps={setSteps}
-        selectedMood={selectedMood}
-        setSelectedMood={setSelectedMood}
-        selectedEnergy={selectedEnergy}
-        setSelectedEnergy={setSelectedEnergy}
-        handleSubmit={handleSubmit}
-        saved={saved}
-      />
-       {error && <div className="error-msg">{error}</div>}
-      <HabitsList
-        userId={userId}
-        setUserId={setUserId}
-        habits={habits}
-        loadHabits={loadHabits}
-        moodEmoji={moodEmoji}
-        energyEmoji={energyEmoji}
-      />
-    </div>
+      {loggedUser == null
+        ? <LoginForm
+              email={email}
+              setEmail={setEmail}
+              password={password}
+              setPassword={setPassword}
+              handleSubmit={handleLogin}
+              loggedIn={loggedIn}
+          />
+        : <>
+                 <HabitForm
+                    sleepHours={sleepHours}
+                    setSleepHours={setSleepHours}
+                    waterMl={waterMl}
+                    setWaterMl={setWaterMl}
+                    steps={steps}
+                    setSteps={setSteps}
+                    selectedMood={selectedMood}
+                    setSelectedMood={setSelectedMood}
+                    selectedEnergy={selectedEnergy}
+                    setSelectedEnergy={setSelectedEnergy}
+                    handleSubmit={handleSubmit}
+                    saved={saved}
+                  />
+            {error && <div className="error-msg">{error}</div>}
+                  <HabitsList
+                    userId={userId}
+                    setUserId={setUserId}
+                    habits={habits}
+                    loadHabits={loadHabits}
+                    moodEmoji={moodEmoji}
+                    energyEmoji={energyEmoji}
+                  />
+          </>
+          }
+      </div>
   )
 }
