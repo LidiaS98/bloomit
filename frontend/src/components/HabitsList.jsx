@@ -1,58 +1,31 @@
-const MOODS = ["VERY_BAD", "BAD", "NEUTRAL", "GOOD", "VERY_GOOD"]
-const ENERGIES = ["VERY_LOW", "LOW", "MODERATE", "HIGH", "VERY_HIGH"]
-
-const moodEmoji = {
-  VERY_BAD: "😞", BAD: "😕", NEUTRAL: "😐", GOOD: "🙂", VERY_GOOD: "😄"
-}
-const energyEmoji = {
-  VERY_LOW: "🪫", LOW: "😴", MODERATE: "⚡", HIGH: "🔋", VERY_HIGH: "🚀"
-}
-
-export default function HabitForm({ sleepHours, setSleepHours, waterMl, setWaterMl, steps, setSteps, selectedMood, setSelectedMood, selectedEnergy, setSelectedEnergy, handleSubmit, saved }) {
+export default function HabitsList({ userId, setUserId, habits, loadHabits, moodEmoji, energyEmoji }) {
   return (
     <div className="card">
-      <p className="card-title">Log today's habits</p>
-
-      <div className="field">
-        <label className="label">Hours slept</label>
-        <input className="input" type="number" value={sleepHours}
-          onChange={e => setSleepHours(e.target.value)} />
+      <p className="card-title">My habit logs</p>
+      <div className="user-row">
+        <div className="user-input">
+          <label className="label">Your user ID</label>
+          <input className="input" type="number" placeholder="e.g. 2"
+            value={userId} onChange={e => setUserId(e.target.value)} />
+        </div>
+        <button className="load-btn" onClick={loadHabits}>Load →</button>
       </div>
 
-      <div className="field">
-        <label className="label">Water (ml)</label>
-        <input className="input" type="number" value={waterMl}
-          onChange={e => setWaterMl(e.target.value)} />
+      <div style={{ marginTop: "1rem" }}>
+        {habits.length === 0
+          ? <p className="empty">Enter your user ID and click Load to see your logs.</p>
+          : habits.map(h => (
+            <div key={h.id} className="habit-item">
+              <span className="habit-stat"><span className="stat-label">Sleep</span> {h.sleepHours}h</span>
+              <span className="habit-stat"><span className="stat-label">Water</span> {h.waterMl}ml</span>
+              <span className="habit-stat"><span className="stat-label">Steps</span> {h.steps}</span>
+              <span className="habit-stat"><span className="stat-label">Mood</span> {moodEmoji[h.mood]} {h.mood}</span>
+              <span className="habit-stat"><span className="stat-label">Energy</span> {energyEmoji[h.energy]} {h.energy}</span>
+              <span className="habit-stat"><span className="stat-label">Date</span> {new Date(h.createdAt).toLocaleDateString()}</span>
+            </div>
+          ))
+        }
       </div>
-
-      <div className="field">
-        <label className="label">Steps</label>
-        <input className="input" type="number" value={steps}
-          onChange={e => setSteps(e.target.value)} />
-      </div>
-
-      <div className="field">
-        <label className="label">Mood</label>
-        <select className="select" value={selectedMood}
-          onChange={e => setSelectedMood(e.target.value)}>
-          {MOODS.map(m => (
-            <option key={m} value={m}>{moodEmoji[m]} {m.replace("_", " ")}</option>
-          ))}
-        </select>
-      </div>
-
-      <div className="field">
-        <label className="label">Energy</label>
-        <select className="select" value={selectedEnergy}
-          onChange={e => setSelectedEnergy(e.target.value)}>
-          {ENERGIES.map(e => (
-            <option key={e} value={e}>{energyEmoji[e]} {e.replace("_", " ")}</option>
-          ))}
-        </select>
-      </div>
-
-      <button className="button" onClick={handleSubmit}>Save today's log</button>
-      {saved && <div className="success-msg">✅ Habit saved!</div>}
     </div>
   )
 }

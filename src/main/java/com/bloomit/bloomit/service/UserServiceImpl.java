@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
@@ -21,5 +21,15 @@ public class UserServiceImpl implements UserService{
     @Override
     public User findById(Long userId) {
         return userRepository.findById(userId).orElse(null);
+    }
+
+    @Override
+    public User login(String email, String password) {
+        User user = userRepository.findByEmail(email).orElse(null);
+        if (user == null) return null;
+        if (passwordEncoder.matches(password, user.getPassword())) {
+            return user;
+        }
+        return null;
     }
 }

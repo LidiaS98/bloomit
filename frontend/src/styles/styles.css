@@ -211,4 +211,14 @@ body {
     font-size: 1.05rem;
     padding: 1rem;
   }
+
+  .error-msg {
+      background: #fde8e8;
+      color: #c0392b;
+      border-radius: 10px;
+      padding: 0.6rem 1rem;
+      font-size: 0.9rem;
+      margin-top: 0.75rem;
+      text-align: center;
+  }
 }
