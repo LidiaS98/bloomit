@@ -1,5 +1,8 @@
+import HabitChart from "./HabitChart.jsx"
+
 export default function HabitsList({ userId, setUserId, habits, loadHabits, moodEmoji, energyEmoji }) {
   return (
+      <>
     <div className="card">
       <p className="card-title">My habit logs</p>
       <div className="user-row">
@@ -27,5 +30,7 @@ export default function HabitsList({ userId, setUserId, habits, loadHabits, mood
         }
       </div>
     </div>
+    <HabitChart habits={habits} />
+    </>
   )
 }
