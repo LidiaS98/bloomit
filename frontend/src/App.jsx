@@ -59,7 +59,8 @@ if (response.ok){
     setSaved(true)
     setTimeout(() => setSaved(false), 2500)
     } else if (response.status === 400){
-        setError("Invalid data! Check your inputs.")
+        const errorMessage = await response.text()
+            setError(errorMessage)
     }
   }
 
