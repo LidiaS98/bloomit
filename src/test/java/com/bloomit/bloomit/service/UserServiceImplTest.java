@@ -1,11 +1,18 @@
 package com.bloomit.bloomit.service;
 
+import com.bloomit.bloomit.model.User;
 import com.bloomit.bloomit.repository.UserRepository;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 
@@ -17,4 +24,18 @@ public class UserServiceImplTest {
 
     @InjectMocks
     private UserServiceImpl userService;
+
+    @Test
+    void findById() {
+        //arrange
+        Long userId = 1L;
+        User expectedUser = new User();
+        when(userRepository.findById(userId)).thenReturn(Optional.of(expectedUser));
+        //act
+        User result = userService.findById(userId);
+        //assert
+        verify(userRepository).findById(userId);
+        assertEquals(expectedUser, result);
+    }
+
 }
