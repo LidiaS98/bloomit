@@ -38,4 +38,15 @@ public class UserServiceImplTest {
         assertEquals(expectedUser, result);
     }
 
+    @Test
+    void createUser() {
+        //arrange
+        User newUser = new User();
+        when(userRepository.save(newUser)).thenReturn(newUser);
+        //act
+        User resultUser = userService.createUser(newUser);
+        //assert
+        verify(userRepository).save(newUser);
+        assertEquals(newUser, resultUser);
+    }
 }
