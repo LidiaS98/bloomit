@@ -71,11 +71,19 @@ if (response.ok){
       .then(data => setHabits(data))
   }
 
+const handleLogout = () => {
+    setLoggedUser(null)
+    setLoggedIn(false)
+    setHabits([])
+
   return (
     <div className="app">
       <div className="header">
         <span className="leaf">🌿</span>
         <h1 className="logo">BloomIT</h1>
+        {loggedUser && (
+            <button className="load-btn" onClick={handleLogout}>Logout</button>
+        )}
       </div>
       {loggedUser == null
         ? <LoginForm
