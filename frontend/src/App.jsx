@@ -28,21 +28,26 @@ export default function App() {
   const [loggedUser, setLoggedUser] = useState(null)
   const [loggedIn, setLoggedIn] = useState(false)
 
-  const handleLogin = async () => {
-      const response = await fetch(`${API}/api/auth`,{
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-              email,
-              password
-          })
-      })
-      if (response.ok){
-          const user = await response.json()
-          setLoggedUser(user)
-          setLoggedIn(true)
-          }
-      }
+const handleLogin = async () => {
+    const response = await fetch(`${API}/api/auth`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+    })
+
+    if (response.ok) {
+        const text = await response.text()
+        if (!text) {
+            setError("Invalid email or password.")
+            return
+        }
+        const user = JSON.parse(text)
+        setLoggedUser(user)
+        setLoggedIn(true)
+    } else {
+        setError("Invalid email or password.")
+    }
+}
 
   const handleSubmit = async () => {
     const response = await fetch(`${API}/api/habits`, {
@@ -75,14 +80,19 @@ const handleLogout = () => {
     setLoggedUser(null)
     setLoggedIn(false)
     setHabits([])
-
+}
   return (
     <div className="app">
-      <div className="header">
-        <span className="leaf">🌿</span>
-        <h1 className="logo">BloomIT</h1>
+    <div className="header">
+        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+            <span className="leaf">🌿</span>
+            <h1 className="logo">BloomIT</h1>
+        </div>
         {loggedUser && (
-            <button className="load-btn" onClick={handleLogout}>Logout</button>
+            <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                <span className="label">Hello, {loggedUser.email}! 👋</span>
+                <button className="load-btn" onClick={handleLogout}>Logout</button>
+            </div>
         )}
       </div>
       {loggedUser == null
