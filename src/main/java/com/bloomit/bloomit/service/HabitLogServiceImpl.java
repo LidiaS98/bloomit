@@ -22,4 +22,15 @@ public class HabitLogServiceImpl implements HabitLogService {
     public void deleteById(Long id){
         habitLogRepository.deleteById(id);
     }
+
+    @Override
+    public HabitLog update(Long id, HabitLog habitlog) {
+        HabitLog existing = habitLogRepository.findById(id).orElseThrow();
+        existing.setSleepHours(habitlog.getSleepHours());
+        existing.setWaterMl(habitlog.getWaterMl());
+        existing.setSteps(habitlog.getSteps());
+        existing.setMood(habitlog.getMood());
+        existing.setEnergy(habitlog.getEnergy());
+        return habitLogRepository.save(existing);
+    }
 }

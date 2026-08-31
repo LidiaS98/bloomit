@@ -28,21 +28,30 @@ export default function App() {
   const [loggedUser, setLoggedUser] = useState(null)
   const [loggedIn, setLoggedIn] = useState(false)
 
-  const handleLogin = async () => {
-      const response = await fetch(`${API}/api/auth`,{
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-              email,
-              password
-          })
-      })
-      if (response.ok){
-          const user = await response.json()
-          setLoggedUser(user)
-          setLoggedIn(true)
-          }
-      }
+const handleLogin = async () => {
+    const response = await fetch(`${API}/api/auth`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+    })
+
+    if (response.ok) {
+        const text = await response.text()
+        if (!text) {
+            setError("Invalid email or password.")
+            return
+        }
+        const user = JSON.parse(text)
+        setLoggedUser(user)
+        setLoggedIn(true)
+        setUserId(user.id)
+        fetch(`${API}/api/habits/${user.id}`)
+            .then(r => r.json())
+            .then(data => setHabits(data))
+    } else {
+        setError("Invalid email or password.")
+    }
+}
 
   const handleSubmit = async () => {
     const response = await fetch(`${API}/api/habits`, {
@@ -52,14 +61,19 @@ export default function App() {
         sleepHours, waterMl, steps,
         mood: selectedMood,
         energy: selectedEnergy,
+        user: {id: loggedUser.id}
       })
     })
 
 if (response.ok){
     setSaved(true)
     setTimeout(() => setSaved(false), 2500)
+    fetch(`${API}/api/habits/${loggedUser.id}`)
+        .then(r => r.json())
+        .then(data => setHabits(data))
     } else if (response.status === 400){
-        setError("Invalid data! Check your inputs.")
+        const errorMessage = await response.text()
+            setError(errorMessage)
     }
   }
 
@@ -70,11 +84,24 @@ if (response.ok){
       .then(data => setHabits(data))
   }
 
+const handleLogout = () => {
+    setLoggedUser(null)
+    setLoggedIn(false)
+    setHabits([])
+}
   return (
     <div className="app">
-      <div className="header">
-        <span className="leaf">🌿</span>
-        <h1 className="logo">BloomIT</h1>
+    <div className="header">
+        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+            <span className="leaf">🌿</span>
+            <h1 className="logo">BloomIT</h1>
+        </div>
+        {loggedUser && (
+            <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                <span className="label">Hello, {loggedUser.email}! 👋</span>
+                <button className="load-btn" onClick={handleLogout}>Logout</button>
+            </div>
+        )}
       </div>
       {loggedUser == null
         ? <LoginForm

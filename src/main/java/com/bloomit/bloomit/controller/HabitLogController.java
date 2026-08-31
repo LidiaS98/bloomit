@@ -27,4 +27,7 @@ public class HabitLogController {
     void deleteHabitLog(@PathVariable Long id){
         habitLogService.deleteById(id);
     }
+
+    @PutMapping("/{id}")
+    public HabitLog updateHabit(@PathVariable Long id, @RequestBody HabitLog habitLog) {return habitLogService.update(id, habitLog);}
 }
