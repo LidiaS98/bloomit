@@ -64,10 +64,8 @@ public class UserServiceImplTest {
                 .thenReturn(true);
         //act
         User result = userService.login(email, password);
-
         //assert
         assertEquals(expectedUser, result);
-
         when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
     }
 
@@ -79,10 +77,8 @@ public class UserServiceImplTest {
 
         when(userRepository.findByEmail(email))
                 .thenReturn(Optional.empty());
-
         // act
         User result = userService.login(email, password);
-
         // assert
         assertNull(result);
     }
@@ -101,10 +97,8 @@ public class UserServiceImplTest {
         // but the password is not matching
         when(bCryptPasswordEncoder.matches(password, "hashedPassword"))
                 .thenReturn(false);
-
         // act
         User result = userService.login(email, password);
-
         // assert
         assertNull(result);
     }

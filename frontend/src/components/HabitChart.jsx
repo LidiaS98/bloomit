@@ -10,7 +10,6 @@ export default function HabitChart({ habits }) {
   useEffect(() => {
     if (!habits || habits.length === 0) return
 
-    // Zniszcz stary wykres jeśli istnieje
     if (instanceRef.current) {
       instanceRef.current.destroy()
     }
