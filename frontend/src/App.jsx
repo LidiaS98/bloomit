@@ -61,12 +61,16 @@ const handleLogin = async () => {
         sleepHours, waterMl, steps,
         mood: selectedMood,
         energy: selectedEnergy,
+        user: {id: loggedUser.id}
       })
     })
 
 if (response.ok){
     setSaved(true)
     setTimeout(() => setSaved(false), 2500)
+    fetch(`${API}/api/habits/${loggedUser.id}`)
+        .then(r => r.json())
+        .then(data => setHabits(data))
     } else if (response.status === 400){
         const errorMessage = await response.text()
             setError(errorMessage)
