@@ -8,4 +8,5 @@ public interface HabitLogService {
     HabitLog save(HabitLog habitLog);
     List<HabitLog> findAllByUser(Long userId);
     void deleteById(Long id);
+    HabitLog update(Long id, HabitLog habitlog);
 }
