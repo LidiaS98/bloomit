@@ -44,6 +44,10 @@ const handleLogin = async () => {
         const user = JSON.parse(text)
         setLoggedUser(user)
         setLoggedIn(true)
+        setUserId(user.id)
+        fetch(`${API}/api/habits/${user.id}`)
+            .then(r => r.json())
+            .then(data => setHabits(data))
     } else {
         setError("Invalid email or password.")
     }
