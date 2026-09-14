@@ -5,21 +5,35 @@ import com.bloomit.bloomit.repository.HabitLogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class HabitLogServiceImpl implements HabitLogService {
     private final HabitLogRepository habitLogRepository;
 
-    public HabitLog save(HabitLog habitLog){
+    public HabitLog save(HabitLog habitLog) {
         return habitLogRepository.save(habitLog);
     }
 
-    public List <HabitLog> findAllByUser(Long userId){
+    public List<HabitLog> findAllByUser(Long userId) {
         return habitLogRepository.findByUser_Id(userId);
     }
 
-    public void deleteById(Long id){
+    public void deleteById(Long id) {
         habitLogRepository.deleteById(id);
+    }
+
+    @Override
+    public Optional<HabitLog> update(Long id, HabitLog habitlog) {
+        return habitLogRepository.findById(id)
+                .map(existing -> {
+                    existing.setSleepHours(habitlog.getSleepHours());
+                    existing.setWaterMl(habitlog.getWaterMl());
+                    existing.setSteps(habitlog.getSteps());
+                    existing.setMood(habitlog.getMood());
+                    existing.setEnergy(habitlog.getEnergy());
+                    return habitLogRepository.save(existing);
+                });
     }
 }

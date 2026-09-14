@@ -4,6 +4,7 @@ import com.bloomit.bloomit.model.HabitLog;
 import com.bloomit.bloomit.service.HabitLogService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -26,5 +27,12 @@ public class HabitLogController {
     @DeleteMapping("/{id}")
     void deleteHabitLog(@PathVariable Long id){
         habitLogService.deleteById(id);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<HabitLog> updateHabit(@PathVariable Long id, @RequestBody HabitLog habitLog) {
+        return habitLogService.update(id, habitLog)
+                .map(updated -> ResponseEntity.ok(updated))
+                .orElse(ResponseEntity.notFound().build());
     }
 }
