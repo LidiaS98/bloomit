@@ -16,7 +16,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleRuntimeException(RuntimeException ex){
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Something went wrong. Please try again.");
+                .body("An unexpected error occurred. Please contact support if the problem persists.");
     }
 
     // 400 - Bad Request
@@ -24,7 +24,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleValidationException(MethodArgumentNotValidException ex){
     return ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
-            .body("Bad request. Please try again.");
+            .body("Invalid input data. Please check your request and correct the values.");
     }
 
     // 404 - Not Found
